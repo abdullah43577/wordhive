@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script defer src="https://kit.fontawesome.com/37007fa821.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./sass/styles.scss" />
+    <script type="module" src="./app/script.js"></script>
+    <title>Word Smithy</title>
+  </head>
+  <body class="flex justify-center">
+    <main class="mx-8 my-8 flex w-full flex-col items-center gap-[3rem] md:mx-auto md:max-w-[600px] lg:max-w-[800px]">
+      <div class="header flex w-full items-center justify-between">
+        <i class="fa-solid fa-book fa-2xl text-itemsColors2"></i>
+
+        <div class="toggleSection flex items-center gap-4">
+          <div class="fontChange flex cursor-pointer items-center gap-1">
+            <p class="text-sm">Roboto Mono</p>
+            <i class="fa-solid fa-angle-down"></i>
+          </div>
+
+          <div class="toggleBg flex items-center gap-2">
+            <div class="toggle__Container flex h-[20px] w-[50px] cursor-pointer items-center rounded-xl border-2 border-itemsColors bg-transparent hover:border-itemsColors2">
+              <div class="toggle h-[16px] w-[16px] cursor-pointer rounded-[100%] bg-itemsColors2"></div>
+            </div>
+            <i class="fa-solid fa-moon fa-2xl text-itemsColors2"></i>
+          </div>
+        </div>
+      </div>
+
+      <form class="input__section relative w-full">
+        <input type="text" class="h-[50px] w-full cursor-pointer rounded-[20px] border border-itemsColors px-2 py-3 outline-none hover:border-itemsColors2" />
+        <i class="fa-solid fa-magnifying-glass fa-lg absolute right-4 top-6 text-subColors"></i>
+      </form>
+
+      <div class="main__content w-full">
+        <!-- <div class="hd flex items-center justify-between">
+          <div class="searchString">
+            <h2 class="font-medium tracking-widest md:text-xl">Fantastic</h2>
+            <p class="font-bold text-itemsColors2">/fænˈtæstɪk/</p>
+          </div>
+
+          <div class="audio flex w-3 cursor-pointer items-center justify-center rounded-full bg-itemsColors p-6">
+            <i class="fa-solid fa-play fa-lg text-itemsColors2"></i>
+          </div>
+        </div>
+
+        <div class="meaning__container my-8 flex flex-col gap-[1.5rem]">
+          <div class="noun__section">
+            <div class="noun flex items-center justify-between">
+              <h2 class="font-bold">noun</h2>
+              <div class="line h-[2px] w-[40%] bg-itemsColors"></div>
+            </div>
+            <p class="my-4 text-sm font-bold text-itemsColors">Meaning</p>
+            <ul>
+              <li>A fanciful or whimsical person.</li>
+            </ul>
+          </div>
+
+          <div class="adjective__section">
+            <div class="adjective flex items-center justify-between">
+              <h2 class="font-bold">Adjective</h2>
+              <div class="line h-[2px] w-[40%] bg-itemsColors"></div>
+            </div>
+            <p class="my-4 text-sm font-bold text-itemsColors">Meaning</p>
+
+            <ul class="flex flex-col gap-[1rem]">
+              <li class="text-base">Existing in or constructed from fantasy; of or relating to fantasy; fanciful.</li>
+              <p class="text-sm text-itemsColors">"He told fantastic stories of dragons and goblins."</p>
+
+              <li class="text-base">Not believable; implausible; seemingly only possible in fantasy.</li>
+              <p class="text-sm text-itemsColors">"She entered the lab and stood gaping for a good ten minutes at the fantastic machinery at work all around her."</p>
+
+              <li class="text-base">Resembling fantasies in irregularity, caprice, or eccentricity; irregular; grotesque.</li>
+
+              <li class="text-base">Wonderful; marvelous; excellent; extraordinarily good or great (used especially as an intensifier).</li>
+              <p class="text-sm text-itemsColors">"I had a simply fantastic vacation, and I can't wait to tell you all about it!"</p>
+            </ul>
+
+            <div class="synonyms__section my-6 flex gap-[3rem]">
+              <p class="font-bold text-itemsColors">Synonyms</p>
+              <ul>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">fabulous</li>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">fantastical</li>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">foolish</li>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">hare-brained</li>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">unrealistic</li>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">wild</li>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">brilliant</li>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">splendid</li>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">super</li>
+                <li class="font-sm cursor-pointer text-itemsColors2 hover:underline">wonderful</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="borderTop h-1 w-full border-t border-itemsColors"></div>
+          <p class="font-base underline">Source</p>
+
+          <div class="links__container my-4">
+            <div class="link mb-2 flex items-center">
+              <p class="text-sm font-bold text-itemsColors md:text-base"><a href="https://www.dictionaryapi.com/" target="_blank">https://www.dictionaryapi.com/</a></p>
+              <i class="fa-solid fa-up-right-from-square fa-xs"></i>
+            </div>
+
+            <div class="link2 flex items-center">
+              <p class="text-sm font-bold text-itemsColors md:text-base"><a href="https://en.wiktionary.org/wiki/fantastic" target="_blank">https://en.wiktionary.org/wiki/fantastic</a></p>
+              <i class="fa-solid fa-up-right-from-square fa-xs"></i>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </main>
+  </body>
+</html>
