@@ -2,7 +2,7 @@
 module.exports = {
   mode: 'jit',
   purge: ['./src/*.html', './src/app/*.js'],
-  darkMode: 'media',
+  darkMode: 'class',
   theme: {
     screens: {
       sm: '480px',
@@ -16,6 +16,7 @@ module.exports = {
         itemsColors: '#B3B3B3',
         itemsColors2: '#A64AEE',
         subColors: '#7373A0',
+        darkBg: '#12273F',
       },
     },
   },
