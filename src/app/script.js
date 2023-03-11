@@ -9,9 +9,15 @@
 // Todo7: on rendering of page, users should get random word search generated in the DOM
 // Todo8: users must be able to toggle background colors ✅
 
+if (module.hot) {
+  module.hot.accept();
+}
+
 class Dictionary {
   #data;
   #history = JSON.parse(localStorage.getItem('history')) || [];
+  #index = parseInt(localStorage.getItem('index')) || 0;
+  #date = new Date().toLocaleString();
   constructor() {
     this.form = document.querySelector('form');
     this.input = document.querySelector('input');
@@ -23,14 +29,20 @@ class Dictionary {
     this.toggleBg = document.querySelector('.toggle__Container');
     this.toggle = document.querySelector('.toggle');
     this.overlay = document.querySelector('.overlay');
+    this.listItem = document.querySelector('.listItem');
+    this.historyModalWindow = document.querySelector('.historyModalWindow');
+    this.button = document.querySelector('button');
 
     this.form.addEventListener('submit', this._searchWord.bind(this));
     this.mainContainer.addEventListener('click', this._playAudio.bind(this));
+    this.mainContainer.addEventListener('click', this._renderHistory.bind(this));
     this.mainContainer.addEventListener('click', this._searchStringCall.bind(this));
+    this.listItem.addEventListener('click', this._searchStringHistory.bind(this));
     this.fontChange.addEventListener('click', this._openFontContainer.bind(this));
     this.fontToggleContainer.addEventListener('click', this._toggleFont.bind(this));
     this.toggleBg.addEventListener('click', this._toggleBackgroundColor.bind(this));
     this.overlay.addEventListener('click', this._hideModal.bind(this));
+    this.button.addEventListener('click', this._closeWindowModal.bind(this));
   }
 
   _hideModal() {
@@ -41,7 +53,7 @@ class Dictionary {
 
   _toggleBackgroundColor() {
     console.log('clicked!');
-    this.toggle.classList.toggle('translate-x-[28px]');
+    this.toggle.classList.toggle('translate-x-[25px]');
     document.documentElement.classList.toggle('dark');
   }
 
@@ -83,17 +95,49 @@ class Dictionary {
   _searchStringCall(e) {
     let element = e.target.closest('.searchStringLink');
     if (!element) return;
-    console.log(element);
 
     // search for any clicked item (synonyms, antonyms)
     this.input.value = element.textContent;
     this._fetchWord(element.textContent.trim());
   }
 
+  _searchStringHistory(e) {
+    let element = e.target.closest('.historyLink');
+    if (!element) return;
+
+    let stringEl = element.firstElementChild.textContent.trim();
+    this.input.value = stringEl;
+    this._fetchWord(stringEl);
+    this.historyModalWindow.classList.add('translate-x-[100%]');
+  }
+
+  _historyElement() {
+    let history = '';
+    this.#history.forEach((historyEl) => {
+      history += `
+        <div class="listEl historyLink cursor-pointer relative flex items-center justify-between px-4 py-5 dark:bg-darkBg" id="${this.#index}">
+          <li class="text-base dark:text-white">${historyEl.word}</li>
+          <i class="fa-solid fa-xmark fa-lg cursor-pointer text-itemsColors2" id="${this.#index}"></i>
+          <p class="absolute left-3 bottom-1 text-xs dark:text-white italic">${historyEl.date}</p>
+        </div>`;
+    });
+    this.listItem.innerHTML = history;
+  }
+
+  _closeWindowModal() {
+    this.historyModalWindow.classList.add('translate-x-[100%]');
+  }
+
+  _renderHistory(e) {
+    let clickedEl = e.target.closest('.historyContainer');
+    if (!clickedEl) return;
+    this.historyModalWindow.classList.remove('translate-x-[100%]');
+    this._historyElement();
+  }
+
   _playAudio(e) {
     let clickedEl = e.target.closest('.audio');
     if (!clickedEl) return;
-
     for (const phonetic of this.#data.phonetics) {
       if (phonetic.audio) {
         const audio = new Audio(phonetic.audio);
@@ -108,11 +152,16 @@ class Dictionary {
         <div class="hd flex items-center justify-between">
           <div class="searchString">
             <h2 class="font-medium tracking-widest text-[28px] dark:text-white">${data.word}</h2>
-            <p class="font-bold text-itemsColors2">${data.phonetic ? data.phonetic : ''}</p>
+            <p class="font-bold text-itemsColors4">${data.phonetic ? data.phonetic : ''}</p>
           </div>
 
-          <div class="audio flex w-3 cursor-pointer items-center justify-center rounded-full bg-itemsColors p-6">
-            <i class="fa-solid fa-play fa-lg text-itemsColors2"></i>
+          <div class="audioHistoryContainer flex items-center gap-3">
+            <div class="audio flex w-3 cursor-pointer items-center justify-center rounded-full bg-itemsColors p-6">
+              <i class="fa-solid fa-play fa-lg text-itemsColors2"></i>
+            </div>
+            <div class="historyContainer flex w-3 cursor-pointer items-center justify-center rounded-full bg-itemsColors p-6">
+              <i class="fa-solid fa-clock-rotate-left fa-lg text-itemsColors2"></i>
+            </div>
           </div>
         </div>
 
@@ -125,7 +174,7 @@ class Dictionary {
               <ul>
                ${result.antonyms
                  .map((word) => {
-                   return `<li class="searchStringLink font-sm cursor-pointer text-itemsColors2 hover:underline">${word}</li>`;
+                   return `<li class="searchStringLink font-sm cursor-pointer text-itemsColors4 hover:underline">${word}</li>`;
                  })
                  .join('')}
               </ul>
@@ -160,7 +209,7 @@ class Dictionary {
               <ul>
                ${result.synonyms
                  .map((word) => {
-                   return `<li class="searchStringLink font-sm cursor-pointer text-itemsColors2 hover:underline">${word}</li>`;
+                   return `<li class="searchStringLink font-sm cursor-pointer text-itemsColors4 hover:underline">${word}</li>`;
                  })
                  .join('')}
               </ul>
@@ -195,9 +244,7 @@ class Dictionary {
 
   _searchWord(e) {
     e.preventDefault();
-
     if (!this.input.value) return;
-
     this._fetchWord(this.input.value);
   }
 
@@ -208,9 +255,21 @@ class Dictionary {
       const [data] = await res.json();
       if (!res.ok) throw new Error('Word not found!');
 
-      console.log(data);
       this.#data = data;
       this._renderWordMeaning(this.#data);
+
+      // increment global variable data
+      ++this.#index;
+
+      let storage = {
+        id: this.#index,
+        word: this.#data.word,
+        date: this.#date,
+      };
+
+      this.#history.push(storage);
+      localStorage.setItem('history', JSON.stringify(this.#history));
+      localStorage.setItem('index', JSON.stringify(this.#index));
     } catch (err) {
       console.log(err);
       this.mainContainer.innerHTML = "Sorry pal, we couldn't find the word you were searching for. You can try the search again at later time or head to the web instead";

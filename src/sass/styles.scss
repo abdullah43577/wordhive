@@ -14,9 +14,10 @@
 
 html,
 body {
-  height: 100%;
   min-height: 100%;
+  height: auto;
   scroll-behavior: smooth;
+  overflow-x: hidden;
   font-family: 'Roboto Mono', monospace;
   // font-family: 'Rubik', sans-serif;
   // font-family: 'Roboto Condensed', sans-serif;
@@ -39,13 +40,21 @@ ul li::before {
   margin-left: -1em; /* Also needed for space (tweak if needed) */
 }
 
-.toggle {
+.toggle,
+.historyModalWindow {
   transition: transform 1s ease;
 }
 
-.fontToggleContainer {
+.fontToggleContainer,
+button,
+.listEl {
   box-shadow: 3px 3px 3px 5px rgba(0, 0, 0, 0.1);
   animation: scale 1s ease;
+}
+
+ul .listEl li::before {
+  color: transparent;
+  content: '';
 }
 
 @keyframes scale {

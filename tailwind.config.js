@@ -14,9 +14,10 @@ module.exports = {
     extend: {
       colors: {
         itemsColors: '#B3B3B3',
-        itemsColors2: '#A64AEE',
+        itemsColors4: '#A64AEE',
+        itemsColors2: '#2A3439',
         subColors: '#7373A0',
-        darkBg: '#12273F',
+        darkBg: '#111111',
       },
     },
   },
