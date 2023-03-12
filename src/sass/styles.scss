@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,700;1,500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;1,600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -18,9 +18,7 @@ body {
   height: auto;
   scroll-behavior: smooth;
   overflow-x: hidden;
-  font-family: 'Roboto Mono', monospace;
-  // font-family: 'Rubik', sans-serif;
-  // font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 input:hover {
@@ -31,7 +29,7 @@ ul {
   list-style: none; /* Remove default bullets */
 }
 
-ul li::before {
+ul li.meaningWord::before {
   content: '\2022'; /* Add content: \2022 is the CSS Code/unicode for a bullet */
   color: #a64aee; /* Change the color */
   font-weight: bold; /* If you want it to be bold */
@@ -59,7 +57,7 @@ ul .listEl li::before {
 
 @keyframes scale {
   0% {
-    scale: (0);
+    scale: (0.8);
   }
 
   100% {

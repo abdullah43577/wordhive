@@ -13,11 +13,14 @@ module.exports = {
 
     extend: {
       colors: {
-        itemsColors: '#B3B3B3',
-        itemsColors4: '#A64AEE',
-        itemsColors2: '#2A3439',
-        subColors: '#7373A0',
-        darkBg: '#111111',
+        textColorsWhiteBg: '#343A40',
+        headingsIconsWhiteBg: '#FF7F50',
+        innerIconColorWhite: '#D3D3D3',
+        historyContainerEl: '#F9F6EF',
+        darkBg: '#000',
+        bullet: '#a64aee',
+        examples: '#2e5bff',
+        txtColor: '#333333',
       },
     },
   },
