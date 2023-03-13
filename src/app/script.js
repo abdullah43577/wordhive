@@ -1,20 +1,17 @@
 import { getRandomWord } from './wordoftheday';
-// Todo: Dictionary user stories
-
-// Todo1: users must be able to search for a given word ✅
-// Todo2: throw error when word can't be found ✅
-// Todo3: users must be able to toggle between font-families ✅
-// Todo4: users must be able to view layouts for different screen sizes ✅
-// Todo5: users must have history of all their searched items ✅
-// Todo6: history must persist in localStorage ✅
-// Todo7: users must be able to toggle background colors ✅
-// Todo8: implementation of word of the day
 
 class Dictionary {
   #data;
   #history = JSON.parse(localStorage.getItem('history')) || [];
   #index = parseInt(localStorage.getItem('index')) || 0;
   #date = new Date().toLocaleString();
+
+  #lastGeneratedTime = parseInt(localStorage.getItem('lastGeneratedTime')) || 0;
+  #currentTime = new Date().getTime(); // results in milliseconds
+  #timeSinceLastGenerated = this.#currentTime - this.#lastGeneratedTime;
+  #twentyFourHours = 86400000;
+  #timeLeft = this.#twentyFourHours - this.#timeSinceLastGenerated;
+  #generatedWord = JSON.parse(localStorage.getItem('generatedWord')) || '';
 
   constructor() {
     this.form = document.querySelector('form');
@@ -43,16 +40,26 @@ class Dictionary {
     this.overlay.addEventListener('click', this._hideModal.bind(this));
     this.button.addEventListener('click', this._closeWindowModal.bind(this));
 
-    // generate random words
-    setInterval(() => {
-      this._generateRandomWords();
-    }, 86400000); // 24 * 60 * 60 * 1000 (24hours in milliseconds)
+    // if time since the last word generated is greater than or equal to 24hours
+    if (this.#timeSinceLastGenerated >= this.#twentyFourHours) {
+      this.#generatedWord = getRandomWord();
+      localStorage.setItem('lastGeneratedTime', this.#currentTime.toString());
+      localStorage.setItem('generatedWord', JSON.stringify(this.#generatedWord));
+    } else {
+      console.log(`Time until next random word generation: ${this.#timeLeft / 1000} seconds`);
+    }
+
+    this._generateRandomWords();
+    localStorage.setItem('lastGeneratedTime', this.#currentTime.toString());
   }
 
   _generateRandomWords() {
-    const randomWord = getRandomWord();
-    this.input.value = randomWord;
-    this._fetchWord(randomWord);
+    if (!this.#generatedWord) {
+      this.#generatedWord = getRandomWord();
+    }
+    this.input.value = this.#generatedWord;
+    this._fetchWord(this.#generatedWord);
+    localStorage.setItem('generatedWord', JSON.stringify(this.#generatedWord));
   }
 
   _hideModal() {

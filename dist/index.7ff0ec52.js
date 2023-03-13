@@ -558,20 +558,17 @@ function hmrAccept(bundle, id) {
 
 },{}],"dUn2x":[function(require,module,exports) {
 var _wordoftheday = require("./wordoftheday");
-// Todo: Dictionary user stories
-// Todo1: users must be able to search for a given word ✅
-// Todo2: throw error when word can't be found ✅
-// Todo3: users must be able to toggle between font-families ✅
-// Todo4: users must be able to view layouts for different screen sizes ✅
-// Todo5: users must have history of all their searched items ✅
-// Todo6: history must persist in localStorage ✅
-// Todo7: users must be able to toggle background colors ✅
-// Todo8: implementation of word of the day
 class Dictionary {
     #data;
     #history = JSON.parse(localStorage.getItem("history")) || [];
     #index = parseInt(localStorage.getItem("index")) || 0;
     #date = new Date().toLocaleString();
+    #lastGeneratedTime = parseInt(localStorage.getItem("lastGeneratedTime")) || 0;
+    #currentTime = new Date().getTime();
+    #timeSinceLastGenerated = this.#currentTime - this.#lastGeneratedTime;
+    #twentyFourHours = 86400000;
+    #timeLeft = this.#twentyFourHours - this.#timeSinceLastGenerated;
+    #generatedWord = JSON.parse(localStorage.getItem("generatedWord")) || "";
     constructor(){
         this.form = document.querySelector("form");
         this.input = document.querySelector("input");
@@ -597,15 +594,20 @@ class Dictionary {
         this.toggleBg.addEventListener("click", this._toggleBackgroundColor.bind(this));
         this.overlay.addEventListener("click", this._hideModal.bind(this));
         this.button.addEventListener("click", this._closeWindowModal.bind(this));
-        // generate random words
-        setInterval(()=>{
-            this._generateRandomWords();
-        }, 86400000); // 24 * 60 * 60 * 1000 (24hours in milliseconds)
+        // if time since the last word generated is greater than or equal to 24hours
+        if (this.#timeSinceLastGenerated >= this.#twentyFourHours) {
+            this.#generatedWord = (0, _wordoftheday.getRandomWord)();
+            localStorage.setItem("lastGeneratedTime", this.#currentTime.toString());
+            localStorage.setItem("generatedWord", JSON.stringify(this.#generatedWord));
+        } else console.log(`Time until next random word generation: ${this.#timeLeft / 1000} seconds`);
+        this._generateRandomWords();
+        localStorage.setItem("lastGeneratedTime", this.#currentTime.toString());
     }
     _generateRandomWords() {
-        const randomWord = (0, _wordoftheday.getRandomWord)();
-        this.input.value = randomWord;
-        this._fetchWord(randomWord);
+        if (!this.#generatedWord) this.#generatedWord = (0, _wordoftheday.getRandomWord)();
+        this.input.value = this.#generatedWord;
+        this._fetchWord(this.#generatedWord);
+        localStorage.setItem("generatedWord", JSON.stringify(this.#generatedWord));
     }
     _hideModal() {
         this.fontToggleContainer.classList.add("hidden");
@@ -829,59 +831,42 @@ parcelHelpers.export(exports, "words", ()=>words);
 const words = [
     "abacus",
     "abhor",
-    "abide",
-    "abnormal",
+    "abject",
+    "abnegate",
     "abode",
-    "abound",
-    "abrasive",
-    "abscond",
-    "abstain",
-    "abstract",
+    "abrogate",
+    "abstemious",
     "abstruse",
     "accede",
-    "acclaim",
     "accolade",
     "accost",
-    "accrue",
     "acerbic",
-    "acme",
-    "acolyte",
-    "acoustic",
     "acquiesce",
-    "acrid",
     "acrimonious",
     "acumen",
     "adage",
     "adamant",
-    "adhere",
-    "adjudicate",
-    "adjunct",
     "admonish",
-    "adorn",
     "adroit",
     "adulation",
     "adulterate",
-    "advent",
-    "adversary",
-    "adverse",
-    "advocate",
+    "adumbrate",
+    "adventitious",
+    "aegis",
+    "aesthetic",
     "affable",
-    "affectation",
-    "affinity",
     "affluent",
-    "agenda",
     "aggrandize",
     "agile",
-    "agnostic",
-    "agrarian",
+    "agitation",
+    "agog",
+    "ailment",
     "alacrity",
-    "alchemy",
+    "alias",
+    "alienate",
     "allege",
-    "alleviate",
-    "allocate",
-    "allot",
+    "allure",
     "aloof",
-    "altercation",
     "altruism",
     "amalgamate",
     "ambiguous",
@@ -889,66 +874,98 @@ const words = [
     "ameliorate",
     "amenable",
     "amiable",
-    "amity",
     "amorphous",
     "anachronistic",
-    "analogous",
     "anathema",
-    "anecdote",
-    "anguish",
-    "animosity",
-    "annex",
-    "annotate",
-    "annul",
-    "anoint",
     "anomaly",
-    "anonymity",
     "antagonize",
     "antediluvian",
-    "anterior",
-    "anticipate",
+    "antedote",
+    "anthropomorphic",
     "antipathy",
-    "antiquated",
     "antithesis",
     "apathy",
     "aphorism",
+    "apocalyptic",
     "apocryphal",
     "apostate",
-    "apostle",
-    "appall",
+    "apotheosis",
+    "apparition",
     "appease",
-    "apprehend",
+    "apprehension",
     "approbation",
     "appropriate",
     "aptitude",
     "arbitrary",
+    "arboreal",
     "arcane",
     "archaic",
     "ardent",
     "arduous",
-    "arid",
+    "aristocracy",
+    "armistice",
+    "arrogance",
+    "articulate",
     "ascetic",
     "asperity",
-    "aspiration",
+    "aspersion",
     "assail",
-    "assimilate",
     "assuage",
-    "astringent",
+    "astute",
     "asylum",
-    "atone",
+    "atavistic",
+    "atheist",
+    "atonement",
+    "attenuate",
     "attest",
     "attribute",
-    "atypical",
-    "audacious",
     "augment",
     "auspicious",
     "austere",
-    "authentic",
+    "autocrat",
     "avarice",
-    "avenge",
-    "avid",
+    "aversion",
     "avow",
-    "awry"
+    "awe",
+    "awry",
+    "axiomatic",
+    "azure",
+    "balk",
+    "balm",
+    "banal",
+    "baneful",
+    "barrage",
+    "bastion",
+    "bawdy",
+    "beatitude",
+    "bedlam",
+    "befuddle",
+    "beguile",
+    "belabor",
+    "beleaguer",
+    "belie",
+    "bellicose",
+    "belligerent",
+    "bemoan",
+    "benevolent",
+    "benign",
+    "bequest",
+    "bereave",
+    "berserk",
+    "beseech",
+    "besmirch",
+    "bestial",
+    "betray",
+    "bevy",
+    "bewilder",
+    "bigotry",
+    "blandishment",
+    "blase",
+    "blasphemy",
+    "blatant",
+    "blight",
+    "blithe",
+    "bloviate"
 ];
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
