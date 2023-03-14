@@ -702,17 +702,27 @@ class Dictionary {
     _playAudio(e) {
         let clickedEl = e.target.closest(".audio");
         if (!clickedEl) return;
+        let audioFound = false;
         for (const phonetic of this.#data.phonetics)if (phonetic.audio) {
             const audio = new Audio(phonetic.audio);
             audio.play();
+            let audioIcon = clickedEl.firstElementChild;
+            audio.onended = ()=>{
+                audioIcon.classList.remove("fa-pause");
+                audioIcon.classList.add("fa-play");
+            };
+            audioIcon.classList.remove("fa-play");
+            audioIcon.classList.add("fa-pause");
+            audioFound = true;
             break;
         }
+        if (!audioFound) alert("There isn't an audio for this word at this time, please check back later or you can search the web");
     }
     _renderWordMeaning(data) {
         let html = `
         <div class="hd flex items-center justify-between">
           <div class="searchString">
-            <h2 class="tracking-widest text-[30px] lg:text-[40px] font-bold text-headingsIconsWhiteBg">${data.word}</h2>
+            <h2 class="tracking-widest ${data.word.length > 10 ? "text-[20px]" : "text-[30px]"} lg:text-[40px] font-bold text-headingsIconsWhiteBg">${data.word}</h2>
             <p class="font-bold text-bullet">${data.phonetic ? data.phonetic : ""}</p>
           </div>
 
@@ -798,9 +808,22 @@ class Dictionary {
             let storage = {
                 id: this.#index,
                 word: this.#data.word,
-                date: this.#date
+                date: this.#date,
+                timeCreated: this.#currentTime
             };
-            this.#history.unshift(storage);
+            let index = 0;
+            const wordExistInTheArray = this.#history.some((historyEl)=>historyEl.word === this.#data.word);
+            if (wordExistInTheArray) {
+                // * find the index of the word if it's in the history array already.
+                index = this.#history.findIndex((obj)=>obj.word === this.#data.word);
+                // todo: if it's less than or equal to means that, the existing word has been stored for the past 24hours or more
+                if (this.#history[index].timeCreated <= this.#twentyFourHours) this.#history.push(storage);
+                else {
+                    this.#history[index].timeCreated = this.#currentTime;
+                    this.#history[index].date = this.#date;
+                }
+            } else this.#history.push(storage);
+            // this.#history.unshift(storage);
             localStorage.setItem("history", JSON.stringify(this.#history));
             localStorage.setItem("index", JSON.stringify(this.#index));
         } catch (err) {

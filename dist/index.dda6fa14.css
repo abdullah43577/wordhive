@@ -585,6 +585,10 @@ img, video {
   padding-left: .5rem;
 }
 
+.text-\[20px\] {
+  font-size: 20px;
+}
+
 .text-\[30px\] {
   font-size: 30px;
 }
