@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="relative">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -10,7 +10,7 @@
     <script type="module" src="./app/script.js"></script>
     <title>Word Hive</title>
   </head>
-  <body class="flex justify-center bg-[#F5F5F5] dark:bg-darkBg">
+  <body class="relative flex justify-center bg-[#F5F5F5] dark:bg-darkBg">
     <main class="mx-8 my-8 flex w-full flex-col items-center gap-[3rem] md:mx-auto md:max-w-[600px] lg:max-w-[800px]">
       <div class="header flex w-full items-center justify-between">
         <i class="fa-solid fa-book fa-2xl text-headingsIconsWhiteBg dark:text-white"></i>
@@ -46,7 +46,7 @@
       <div class="loader hidden"></div>
 
       <!-- add flex and remove hidden when using this -->
-      <div class="historyModalWindow absolute top-0 right-0 flex h-auto min-h-full w-3/4 translate-x-[100%] flex-col gap-[1rem] bg-textColorsWhiteBg p-9 dark:bg-[#282424] lg:w-1/3">
+      <div class="historyModalWindow absolute top-0 right-0 bottom-0 flex h-full min-h-full w-3/4 translate-x-[100%] flex-col gap-[1rem] bg-textColorsWhiteBg p-9 dark:bg-[#282424] lg:w-1/3">
         <button class="bg-historyContainerEl px-4 py-2 dark:bg-darkBg dark:text-white"><i class="fa-solid fa-arrow-left text-itemsColors2 dark:text-itemsColors"></i> Back</button>
 
         <ul class="listItem flex flex-col gap-[1rem]"></ul>
